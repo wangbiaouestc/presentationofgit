@@ -1,0 +1,47 @@
+\documentclass{standalone}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows,shapes,chains,positioning,scopes}
+\usetikzlibrary{fit,calc,backgrounds,patterns}
+\usetikzlibrary{shadows}
+
+% \tikzstyle{decision} = [diamond, draw, fill=blue!20,aspect=2, 
+%     text width=4.5em, text badly centered, node distance=1.75cm, inner sep=0pt]
+    
+\tikzstyle{baseline}    = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em,node distance=3.5cm]
+\tikzstyle{workingcode} = [rectangle, draw, fill=green!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em,node distance=3.5cm]    
+
+    
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=2.5cm,
+    minimum height=2em]
+   
+        
+\usetikzlibrary{arrows}    
+\begin{document}    
+
+\begin{tikzpicture}[xscale=.15,yscale=.5, every node/.style={scale=.6}]
+    % Place nodes
+    \node [baseline]    (baselineCode) {baseline commit};
+    \node [workingcode, below of=baselineCode] (workingCode0) {commit 0}; \node [above of=workingCode0] (above0)  {OK};
+    \node [workingcode, right of=workingCode0] (workingCode1) {commit 1}; \node [above of=workingCode1] (above1)  {OK};    
+    \node [workingcode, right of=workingCode1] (workingCode2) {commit 2}; \node [above of=workingCode2] (above2)  {OK};
+    \node [workingcode, right of=workingCode2,fill=red!20] (workingCode3) {commit 3}; \node [above of=workingCode3] (above3)  {Bug};
+    
+    \path [line] (baselineCode) -- node [right]{git diff} (workingCode0);    
+    \path [line] (workingCode0) -- node [above]{git diff} (workingCode1);
+    \path [line] (workingCode1) -- node [above]{git diff} (workingCode2);
+    \path [line] (workingCode2) -- node [above]{\textbf{git diff}} (workingCode3);    
+    
+\end{tikzpicture}
+\end{document}
+

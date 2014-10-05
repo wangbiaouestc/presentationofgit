@@ -1,0 +1,74 @@
+\documentclass{standalone}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows,shapes,chains,positioning,scopes}
+\usetikzlibrary{fit,calc,backgrounds,patterns}
+\usetikzlibrary{shadows}
+
+% \tikzstyle{decision} = [diamond, draw, fill=blue!20,aspect=2, 
+%     text width=4.5em, text badly centered, node distance=1.75cm, inner sep=0pt]
+    
+\tikzstyle{baseline}    = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em,node distance=3.5cm]
+\tikzstyle{workingcode} = [rectangle, draw, fill=green!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em,node distance=3.5cm]
+    
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=2.5cm,
+    minimum height=2em]
+   
+        
+\usetikzlibrary{arrows}    
+\begin{document}    
+
+\begin{tikzpicture}[xscale=.15,yscale=.5, every node/.style={scale=.6}]
+    % Place nodes
+    \node [baseline]    (baselineCode) {baseline commit};
+    \node [workingcode, below of=baselineCode] (workingCode0) {commit 0}; \node [above of=workingCode0] (above0)  {Msg:func0};
+    \node [workingcode, right of=workingCode0] (workingCode1) {commit 1}; \node [above of=workingCode1] (above1)  {Msg:func1};    
+    \node [workingcode, right of=workingCode1] (workingCode2) {commit 2}; \node [above of=workingCode2] (above2)  {Msg:func2};
+    \node [workingcode, right of=workingCode2] (workingCode3) {commit 3}; \node [above of=workingCode3] (above3)  {Msg:func3};
+    
+
+    \path [line] (baselineCode) -- node [right]{git diff} (workingCode0);    
+    \path [line] (workingCode0) -- node [above]{git diff} (workingCode1);
+    \path [line] (workingCode1) -- node [above]{git diff} (workingCode2);
+    \path [line] (workingCode2) -- node [above]{git diff} (workingCode3);    
+    
+%     \path [line] (Bs)    -- node [left]{Yes} (Cond1);
+%     \path [line] (Cond1) -- node [left]{Yes} (Cond234);    
+%     \path [line] (PUorTU) -- node [above]{No} (Exit);    
+%     \path [line] (Bs)     -| node [right]{No} (Exit);
+%     \path [line] (Cond1)  -| node [right]{No} (Exit);
+%     
+%     \path [line] (Bs)     --                     (BsEnd);    
+%     \path [line] (Cond1)  --                  (Cond1End);
+% 
+%     
+%     \node [below of=Cond234,node distance=1cm] (Cond234End) {};
+%     \node [cloud, left  of=Cond234End,node distance=3cm] (SF) {strong : 3 pels};
+%     \node [cloud, right of=Cond234End,node distance=3.75cm] (NF) {normal : 1 or 2 pels};
+%     
+%     \path [line] (Cond234)  |-node [above left]{Yes}  (SF);
+%     \path [line] (Cond234)  |-node [above right]{No}  (NF);
+    
+
+
+    
+%     \node [rectangle, right of=Exit, node distance=3cm, minimum width=3cm] (Explanation) {Cond1,2,3,4: \n decided by the red samples};
+%     \path [line] (Cond234) -| node [near start] {No} (Exit);
+% %     \path [line] (update) |- (Bs);
+%     \path [line] (Cond234) -- node {no}(stop);
+%     \path [line,dashed] (expert) -- (PUorTU);
+%     \path [line,dashed] (system) -- (PUorTU);
+%     \path [line,dashed] (system) |- (Cond1);
+\end{tikzpicture}
+\end{document}
+
