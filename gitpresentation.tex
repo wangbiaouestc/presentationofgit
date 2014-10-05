@@ -16,7 +16,7 @@
 
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
-
+\usepackage{listings}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{booktabs}
@@ -29,14 +29,14 @@
 
 \begin{document}
 
-\begin{frame}
-  \titlepage
-\end{frame}
+% \begin{frame}
+%   \titlepage
+% \end{frame}
 
 % Uncomment these lines for an automatically generated outline.
-% \begin{frame}{Outline}
-%  \tableofcontents
-% \end{frame}
+\begin{frame}{Outline}
+ \tableofcontents
+\end{frame}
 
 \section{Introduction}
 \begin{frame}{Introduction}
@@ -48,6 +48,7 @@
     \end{figure}
     \begin{figure}
       \includegraphics[width=.7\textwidth]{figures/withversioncontrol.pdf}
+      \caption{\label{git life cycle} without and with version control.}
     \end{figure}         
 \end{frame}
 
@@ -72,7 +73,7 @@
 \begin{frame}{Understanding git: file status within git}
     \begin{figure}
     \includegraphics[width=.7\textwidth]{figures/gitlifestyle.png}
-    \caption{\label{git life cycle} source: internet.}
+    \caption{\label{git life cycle} source: Internet.}
     \end{figure}             
 \end{frame}
 
@@ -87,44 +88,94 @@
         \item bad commit message: ``fix some bugs''
         \item would be better: ``fix SIMD memory load bugs within deblockingfilter.cpp''
      \end{itemize}
-     \item remove file: \textbf{git remove       }
+     \item remove file: \textbf{git rm       }
+    \end{itemize}
+    other useful commands: 
+     \begin{itemize}
+        \item git log:
+	      \begin{itemize}
+	       \item git log -\textit{n}: show the last \textbf{n} commit information
+	       \item git log \textit{path}: show the last commit information regarding \textbf{path}
+	      \end{itemize}
+	\item git diff: show difference 	
+     \end{itemize}    
+\end{frame}
+
+\begin{frame}{Understanding git: git diff}
+    \begin{figure}
+    \includegraphics[width=.5\textwidth]{figures/GitDiffSimple.png}
+    \caption{\label{git diff} source: Internet.}
+    \end{figure}             
+    \begin{itemize}
+     \item    git diff: between the working directory and the index(staged)
+     \item    git diff --cached: between the the index(staged) and HEAD
+     \item    git diff HEAD: between the working directory and HEAD, includes changes in the index
     \end{itemize}
 \end{frame}
 
-\begin{frame}{How to use git}
-\begin{itemize}
-\item Use \texttt{tabular} for basic tables --- see Table~\ref{tab:widgets}, for example.
-\item You can upload a figure (JPEG, PNG or PDF) using the files menu. 
-\item To include it in your document, use the \texttt{includegraphics} command (see the comment below in the source code).
-\end{itemize}
-
-% Commands to include a figure:
-%\begin{figure}
-%\includegraphics[width=\textwidth]{your-figure's-file-name}
-%\caption{\label{fig:your-figure}Caption goes here.}
-%\end{figure}
-
-\begin{table}
-\centering
-\begin{tabular}{l|r}
-Item & Quantity \\\hline
-Widgets & 42 \\
-Gadgets & 13
-\end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
+\section{git in teamwork}
+\begin{frame}{How to use git under team development senario}
+    \begin{itemize}
+      \item    git pull: to get the lastest copy of code.
+      \item    git commit: commit your local code
+      \item    git push: push your code change to the remote server
+    \end{itemize}
+    However, there might be a problem when you push
+    \begin{figure}
+      \includegraphics[width=.7\textwidth]{figures/withversioncontrolHead.pdf} 
+      \caption{\label{git life cycle} team development using git.}
+    \end{figure}    
 
 \end{frame}
 
-% \subsection{Mathematics}
+\begin{frame}{solution: prevent it happen}
 
-\begin{frame}{Readable Mathematics}
+    \begin{block}{Simple way}
+      \begin{itemize}
+	\item    git pull: to get the latest copy of code.
+	\item    \textbf{before you commit, git pull again to make sure you are up-to-date}
+	\item    git commit: commit your local code
+	\item    git push: push your code change to the remote server
+      \end{itemize}     
+    \end{block}    
+     
+\end{frame}
 
-% Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
-% $$S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
-%       = \frac{1}{n}\sum_{i}^{n} X_i$$
-% denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
+\begin{frame}{solution: if you already commit}
+    \begin{block}{Harder way: }
+      \begin{itemize}      
+	\item    git diff HEAD$\sim$1 $>$ yourcommit.diff : save your work into patch
+	\item    git reset --hard HEAD$\sim$1: reset your code to HEAD(not commit B)
+	\item    git pull: to get the latest copy of code (the HEAD new)
+	\item    patch -p1 $<$ yourcommit.diff: apply patch
+	\item    git add -u: add to the stage	
+	\item    git commit: commit your local code
+	\item    git push: push your code change to the remote server(create a node whose parent commit is HEAD new)
+      \end{itemize}     
+    \end{block}
+\end{frame}
 
+\section{Summary}
+
+\begin{frame}{Summary}
+    \begin{block}{work with git more effectively}
+      \begin{itemize}      
+	\item    file status: untracked, tracked, staged, commit
+	\item    commands to change th status of file:
+		\begin{itemize}      
+		  \item git init
+		  \item git add
+		  \item git add -u
+		  \item git commit 
+		  \item git rm
+		\end{itemize}     
+	\item    working with other developers:
+		\begin{itemize}      
+		  \item use git pull frequently to make sure you are up-to-date
+		  \item otherwise use git reset to go back to previous common parent commit, and apply patch
+		\end{itemize}     	
+      \end{itemize}     
+    \end{block}
 \end{frame}
 
 \end{document}
